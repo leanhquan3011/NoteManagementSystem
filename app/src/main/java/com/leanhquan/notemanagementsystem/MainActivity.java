@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -23,6 +24,8 @@ import com.leanhquan.notemanagementsystem.Common.Common;
 import com.leanhquan.notemanagementsystem.Model.User;
 import com.rey.material.widget.CheckBox;
 
+import io.paperdb.Paper;
+
 public class MainActivity extends AppCompatActivity {
 
     private EditText            edtUsername, edtPassword;
@@ -38,18 +41,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         init();
 
-        SharedPreferences sharedPreferences = getSharedPreferences("checkbox", MODE_PRIVATE);
-        String checkbox = sharedPreferences.getString("remember", "");
-
-        if (checkbox.equals("true")){
-            Intent homeInten = new Intent(MainActivity.this, HomeActivity.class);
-            startActivity(homeInten);
-        } else if (checkbox.equals("false")) {
-            return;
-        }
+        Paper.init(this);
 
         database = FirebaseDatabase.getInstance();
         userDB = database.getReference("user");
+
+        String user = Paper.book().read(Common.USER_KEY);
+        String pwd = Paper.book().read(Common.PASS_KEY);
+        if(user!=null && pwd != null)
+        {
+            if(!user.isEmpty() && !pwd.isEmpty())
+                login(user,pwd);
+        }
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,21 +75,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        cbRemember.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (buttonView.isChecked()){
-                    SharedPreferences sharedPreferences = getSharedPreferences("checkbox", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("remember", "true");
-                } else if (!buttonView.isChecked()) {
-                    SharedPreferences sharedPreferences = getSharedPreferences("checkbox", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("remember", "false");
-                }
-            }
-        });
-
 
     }
 
@@ -103,6 +91,11 @@ public class MainActivity extends AppCompatActivity {
                     User userLogin = snapshot.child(user).getValue(User.class);
 
                     if (userLogin.getPassword().equals(pass)){
+                        if(cbRemember.isChecked())
+                        {
+                            Paper.book().write(Common.USER_KEY,edtUsername.getText().toString());
+                            Paper.book().write(Common.PASS_KEY,edtPassword.getText().toString());
+                        }
                         Intent homeInten = new Intent(MainActivity.this, HomeActivity.class);
                         Common.currentUser = userLogin;
                         startActivity(homeInten);

@@ -10,4 +10,18 @@
     <string name="hintEdtusername">acb</string>
     <string name="txtEmail">Email address</string>
     <string name="toolbar_register">Register</string>
+    <string name="nav_page_home">Home</string>
+    <string name="nav_page_category">Category</string>
+    <string name="nav_page_piority">Priority</string>
+    <string name="nav_page_status">Status</string>
+    <string name="nav_page_note">Note</string>
+    <string name="nav_account_menu">Account</string>
+    <string name="nav_page_edtit_profile">Edit profile</string>
+    <string name="nav_page_change_password">Change password</string>
+    <string name="nav_page_logout">Log out</string>
+    <string name="navigation_drawer_opne">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Closer navigation drawer</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
