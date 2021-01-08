@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">NoteManagementSystem</string>
+    <string name="txtUsernameLogin">Username</string>
+    <string name="hintEdtEmail">abc@gmail.com</string>
+    <string name="txtPasswordLogin">Password</string>
+    <string name="hintEdtPassword">••••••••••••••</string>
+    <string name="cb_remember">Remember me</string>
+    <string name="btn_SignUp">Don\'t have an account?</string>
+    <string name="btn_login">Login</string>
+    <string name="hintEdtusername">acb</string>
+    <string name="txtEmail">Email address</string>
+    <string name="toolbar_register">Register</string>
 </resources>
