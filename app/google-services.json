@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "45090055178",
+    "project_id": "notemanagement-fe12d",
+    "storage_bucket": "notemanagement-fe12d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:45090055178:android:6249ee1ec6144db9502bf3",
+        "android_client_info": {
+          "package_name": "com.leanhquan.notemanagementsystem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "45090055178-8ggj3hue60tb6gv6r96am7j05lc3thmv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.leanhquan.notemanagementsystem",
+            "certificate_hash": "fa3f828a09c6ce0be2550422d92febb0a8053b58"
+          }
+        },
+        {
+          "client_id": "45090055178-nohhtqauo1lje4nh7ffcrhj355f5b60q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSMl6JwrrO_sJ5NO7mXq53cECN1Ly7YD0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "45090055178-nohhtqauo1lje4nh7ffcrhj355f5b60q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
