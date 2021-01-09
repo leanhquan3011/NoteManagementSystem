@@ -1,8 +1,6 @@
 package com.leanhquan.notemanagementsystem.UI;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,7 +10,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,10 +18,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.andremion.counterfab.CounterFab;
-import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,23 +28,25 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.leanhquan.notemanagementsystem.Common.Common;
 import com.leanhquan.notemanagementsystem.Model.Category;
+import com.leanhquan.notemanagementsystem.Model.Piority;
 import com.leanhquan.notemanagementsystem.R;
 import com.leanhquan.notemanagementsystem.ViewHolder.CategoryViewHolder;
+import com.leanhquan.notemanagementsystem.ViewHolder.PiorityViewHolder;
 import com.rengwuxian.materialedittext.MaterialEditText;
+
 import java.util.Date;
 
+public class PiorityFragment extends Fragment {
 
-public class CategoryFragment extends Fragment {
-
-    private CounterFab              fabAddCategory;
-    private MaterialEditText        edtNameNewCategory;
+    private CounterFab              fabAddPiority;
+    private MaterialEditText        edtNameNewPiority;
     private Button                  btnAdd, btnCancel;
     private FirebaseDatabase        database;
-    private DatabaseReference       categories;
-    private Category                createCategory;
-    private RecyclerView            recycleCategory;
+    private DatabaseReference       piorities;
+    private Piority                 newPiority;
+    private RecyclerView            recyclePiority;
 
-    private FirebaseRecyclerAdapter<Category, CategoryViewHolder> adapterCategorylist;
+    private FirebaseRecyclerAdapter<Piority, PiorityViewHolder> adapterPioritylist;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,85 +56,63 @@ public class CategoryFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        return inflater.inflate(R.layout.fragment_category, container, false);
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_piority, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        init(view);
 
         database = FirebaseDatabase.getInstance();
-        categories = database.getReference().child("categories");
+        piorities = database.getReference().child("piorities");
 
-        recycleCategory = view.findViewById(R.id.recycler_category);
+        recyclePiority = view.findViewById(R.id.recycler_piority);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext());
-        recycleCategory.setLayoutManager(manager);
+        recyclePiority.setLayoutManager(manager);
 
-        fabAddCategory.setOnClickListener(new View.OnClickListener() {
+        fabAddPiority = view.findViewById(R.id.fabPiority);
+
+        fabAddPiority.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialogAddnewCategory();
+                showDialogAddnewPiority();
             }
         });
 
-        showListCategory();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (adapterCategorylist != null) { adapterCategorylist.startListening();}
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (adapterCategorylist != null) {adapterCategorylist.stopListening();}
+        showListPiority();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (adapterCategorylist != null) { adapterCategorylist.startListening();}
+        if (adapterPioritylist != null) {adapterPioritylist.startListening();}
     }
 
-    private void showListCategory() {
-        Query query = FirebaseDatabase.getInstance().getReference().child("categories");
-        FirebaseRecyclerOptions<Category> options = new FirebaseRecyclerOptions.Builder<Category>()
-                .setQuery(query, Category.class)
-                .build();
-        adapterCategorylist = new FirebaseRecyclerAdapter<Category, CategoryViewHolder>(options) {
-            @NonNull
-            @Override
-            public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_list_category, parent, false);
-                return new CategoryViewHolder(view);
-            }
-
-            @Override
-            protected void onBindViewHolder(@NonNull CategoryViewHolder holder, int position, @NonNull Category model) {
-                holder.txtNameCategory.setText(model.getName());
-                holder.txtDateCreateCategory.setText(model.getDate());
-            }
-
-        };
-        recycleCategory.setAdapter(adapterCategorylist);
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (adapterPioritylist != null) {adapterPioritylist.startListening();}
     }
 
-    private void showDialogAddnewCategory() {
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (adapterPioritylist != null) {adapterPioritylist.stopListening();}
+    }
+
+    private void showDialogAddnewPiority() {
         final AlertDialog optionDialog = new AlertDialog.Builder(getActivity()).create();
-        optionDialog.setTitle("Add new category");
-        optionDialog.setMessage("Category form");
+        optionDialog.setTitle("Add new piority");
+        optionDialog.setMessage("Piority form");
         LayoutInflater inflater = LayoutInflater.from(getActivity());
-        View addMenuLayout = inflater.inflate(R.layout.layout_create_new_category,null, false);
-        edtNameNewCategory = addMenuLayout.findViewById(R.id.edtNamenewCategory);
-        btnAdd = addMenuLayout.findViewById(R.id.btnAddnewCategory);
-        btnCancel = addMenuLayout.findViewById(R.id.btnCancelAddCategory);
+        View addPiority = inflater.inflate(R.layout.layout_create_new_piority,null, false);
+        edtNameNewPiority = addPiority.findViewById(R.id.edtNamenewPiority);
+        btnAdd = addPiority.findViewById(R.id.btnAddnewPiority);
+        btnCancel = addPiority.findViewById(R.id.btnCancelAddPiority);
 
-        optionDialog.setView(addMenuLayout);
-        optionDialog.setIcon(R.drawable.ic_note);
+        optionDialog.setView(addPiority);
+        optionDialog.setIcon(R.drawable.ic_priority);
 
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -147,16 +122,16 @@ public class CategoryFragment extends Fragment {
                 progressDialog.setMessage("Waiting....");
                 progressDialog.show();
 
-                final String newCategory = edtNameNewCategory.getText().toString().trim();
+                final String newName = edtNameNewPiority.getText().toString().trim();
                 final String currentDateTimeString = java.text.DateFormat.getDateTimeInstance().format(new Date()).trim();
 
-                if(!newCategory.isEmpty()){
-                    createCategory = new Category(newCategory, currentDateTimeString);
+                if(!newName.isEmpty()){
+                    newPiority = new Piority(newName, currentDateTimeString);
                 } else {
                     progressDialog.dismiss();
                     Toast.makeText(getActivity(), "Please fill full information", Toast.LENGTH_SHORT).show();
                 }
-                categories.push().setValue(createCategory);
+                piorities.push().setValue(newPiority);
                 progressDialog.dismiss();
                 optionDialog.dismiss();
             }
@@ -169,38 +144,37 @@ public class CategoryFragment extends Fragment {
             }
         });
 
-
         optionDialog.show();
     }
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         if (item.getTitle().equals(Common.UPDATE)){
-            showDialogUpdateCategory(adapterCategorylist.getRef(item.getOrder()).getKey(),adapterCategorylist.getItem(item.getOrder()));
+            showDialogUpdatePiority(adapterPioritylist.getRef(item.getOrder()).getKey(),adapterPioritylist.getItem(item.getOrder()));
         } else if (item.getTitle().equals(Common.DELETE)) {
-            showDialogDeleteCategory(adapterCategorylist.getRef(item.getOrder()).getKey());
+            showDialogDeletePiority(adapterPioritylist.getRef(item.getOrder()).getKey());
         }
         return super.onContextItemSelected(item);
     }
 
-    private void showDialogDeleteCategory(String key) {
-        categories.child(key).removeValue();
+    private void showDialogDeletePiority(String key) {
+        piorities.child(key).removeValue();
         Toast.makeText(getActivity(), "Item Deleted", Toast.LENGTH_SHORT).show();
     }
 
-    private void showDialogUpdateCategory(final String key, final Category item) {
+    private void showDialogUpdatePiority(final String key, final Piority item) {
         final AlertDialog optionDialog = new AlertDialog.Builder(getActivity()).create();
         optionDialog.setTitle("edit category");
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View addMenuLayout = inflater.inflate(R.layout.layout_create_new_category,null, false);
-        edtNameNewCategory = addMenuLayout.findViewById(R.id.edtNamenewCategory);
+        edtNameNewPiority = addMenuLayout.findViewById(R.id.edtNamenewCategory);
         btnAdd = addMenuLayout.findViewById(R.id.btnAddnewCategory);
         btnCancel = addMenuLayout.findViewById(R.id.btnCancelAddCategory);
 
         optionDialog.setView(addMenuLayout);
         optionDialog.setIcon(R.drawable.ic_note);
 
-        edtNameNewCategory.setText(item.getName());
+        edtNameNewPiority.setText(item.getName());
 
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -211,14 +185,14 @@ public class CategoryFragment extends Fragment {
                 progressDialog.setMessage("Waiting....");
                 progressDialog.show();
 
-                final String newCategoryUpdate = edtNameNewCategory.getText().toString().trim();
+                final String newPiorityUpdate = edtNameNewPiority.getText().toString().trim();
 
-                if(!newCategoryUpdate.isEmpty()){
-                                item.setName(newCategoryUpdate);
-                                categories.child(key).setValue(item);
+                if(!newPiorityUpdate.isEmpty()){
+                                item.setName(newPiorityUpdate);
+                                piorities.child(key).setValue(item);
                                 progressDialog.dismiss();
+                                Toast.makeText(getActivity(), "Update "+newPiorityUpdate+" successfuly", Toast.LENGTH_SHORT).show();
                                 optionDialog.dismiss();
-                                Toast.makeText(getActivity(), "Update "+newCategoryUpdate+" successfuly", Toast.LENGTH_SHORT).show();
                 } else {
                     progressDialog.dismiss();
                     Toast.makeText(getActivity(), "Please fill full information", Toast.LENGTH_SHORT).show();
@@ -236,8 +210,25 @@ public class CategoryFragment extends Fragment {
         optionDialog.show();
     }
 
+    private void showListPiority() {
+        Query query = FirebaseDatabase.getInstance().getReference().child("piorities");
+        FirebaseRecyclerOptions<Piority> options = new FirebaseRecyclerOptions.Builder<Piority>()
+                .setQuery(query, Piority.class)
+                .build();
+        adapterPioritylist = new FirebaseRecyclerAdapter<Piority, PiorityViewHolder>(options) {
+            @NonNull
+            @Override
+            public PiorityViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_list_piority, parent, false);
+                return new PiorityViewHolder(view);
+            }
 
-    private void init(View view) {
-        fabAddCategory = view.findViewById(R.id.fabCategory);
+            @Override
+            protected void onBindViewHolder(@NonNull PiorityViewHolder holder, int position, @NonNull Piority model) {
+                holder.txtNamePiority.setText(model.getName());
+                holder.txtDateCreatePiority.setText(model.getDate());
+            }
+        };
+        recyclePiority.setAdapter(adapterPioritylist);
     }
 }

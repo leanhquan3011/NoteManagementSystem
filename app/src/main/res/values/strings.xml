@@ -27,8 +27,10 @@
     <string name="btn_add">Add</string>
     <string name="btn_cancel">Cancel</string>
     <string name="hint_name_new_category">Name category</string>
-    <string name="txtNameCategory">Name :</string>
+    <string name="txtNameCategory">Name of category :</string>
     <string name="txt_show_name_category">Name of category</string>
     <string name="txt_date_category">Created date :</string>
     <string name="txt_show_date_category">Date</string>
+    <string name="txt_name_piority">Name of piority :</string>
+    <string name="txt_show_name_piority">Name of piority</string>
 </resources>

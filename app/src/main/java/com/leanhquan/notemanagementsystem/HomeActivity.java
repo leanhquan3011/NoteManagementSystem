@@ -24,7 +24,9 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.leanhquan.notemanagementsystem.Common.Common;
+import com.leanhquan.notemanagementsystem.Model.Piority;
 import com.leanhquan.notemanagementsystem.UI.CategoryFragment;
+import com.leanhquan.notemanagementsystem.UI.PiorityFragment;
 
 import io.paperdb.Paper;
 
@@ -115,10 +117,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 CategoryFragment categoryFragment = new CategoryFragment();
                 fragmentTransaction.add(R.id.content_home, categoryFragment);
                 fragmentTransaction.commit();
-                txtNameToolbar.setText("Category");
+                txtNameToolbar.setText("Category Management");
                 Toast.makeText(this, "Go to category", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.page_piority:
+                PiorityFragment piorityFragment = new PiorityFragment();
+                fragmentTransaction.add(R.id.content_home, piorityFragment);
+                fragmentTransaction.commit();
+                txtNameToolbar.setText("Piority Management");
                 Toast.makeText(this, "Go to piority", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.page_status:

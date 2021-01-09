@@ -10,14 +10,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.leanhquan.notemanagementsystem.Common.Common;
 import com.leanhquan.notemanagementsystem.R;
 
-public class CategoryViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
+public class PiorityViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
-    public TextView             txtNameCategory, txtDateCreateCategory;
+    public TextView txtNamePiority, txtDateCreatePiority;
 
-    public CategoryViewHolder(@NonNull View itemView) {
+    public PiorityViewHolder(@NonNull View itemView) {
         super(itemView);
-        txtNameCategory = itemView.findViewById(R.id.txtNameCategory);
-        txtDateCreateCategory = itemView.findViewById(R.id.txtDateCreateCategory);
+        txtNamePiority = itemView.findViewById(R.id.txtNamePiority);
+        txtDateCreatePiority = itemView.findViewById(R.id.txtDateCreatePiority);
         itemView.setOnCreateContextMenuListener(this);
     }
 
