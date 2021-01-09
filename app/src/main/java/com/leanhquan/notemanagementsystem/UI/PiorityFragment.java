@@ -164,7 +164,7 @@ public class PiorityFragment extends Fragment {
 
     private void showDialogUpdatePiority(final String key, final Piority item) {
         final AlertDialog optionDialog = new AlertDialog.Builder(getActivity()).create();
-        optionDialog.setTitle("edit category");
+        optionDialog.setTitle("edit piority");
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View addMenuLayout = inflater.inflate(R.layout.layout_create_new_category,null, false);
         edtNameNewPiority = addMenuLayout.findViewById(R.id.edtNamenewCategory);

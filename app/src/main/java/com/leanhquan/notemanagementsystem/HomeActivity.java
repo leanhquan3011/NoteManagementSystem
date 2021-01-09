@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -27,6 +28,7 @@ import com.leanhquan.notemanagementsystem.Common.Common;
 import com.leanhquan.notemanagementsystem.Model.Piority;
 import com.leanhquan.notemanagementsystem.UI.CategoryFragment;
 import com.leanhquan.notemanagementsystem.UI.PiorityFragment;
+import com.leanhquan.notemanagementsystem.UI.StatusFragment;
 
 import io.paperdb.Paper;
 
@@ -37,7 +39,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private TextView            txtFullname, txtNameToolbar;
     private Toolbar             toolbar;
     private FragmentManager     fragmentManager;
-    private FragmentTransaction fragmentTransaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +47,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         init();
 
         fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
 
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
                 this, drawer,toolbar,
@@ -103,45 +103,49 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         txtNameToolbar = findViewById(R.id.nameToolbar);
     }
 
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        switch (id){
-            case R.id.page_home:
-                Intent intentHome = new Intent(this, HomeActivity.class);
-                startActivity(intentHome);
-                Toast.makeText(this, "Go to home", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.page_category:
-                CategoryFragment categoryFragment = new CategoryFragment();
-                fragmentTransaction.add(R.id.content_home, categoryFragment);
-                fragmentTransaction.commit();
-                txtNameToolbar.setText("Category Management");
-                Toast.makeText(this, "Go to category", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.page_piority:
-                PiorityFragment piorityFragment = new PiorityFragment();
-                fragmentTransaction.add(R.id.content_home, piorityFragment);
-                fragmentTransaction.commit();
-                txtNameToolbar.setText("Piority Management");
-                Toast.makeText(this, "Go to piority", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.page_status:
-                Toast.makeText(this, "Go to status", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.page_note:
-                Toast.makeText(this, "Go to note", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.page_edit_profile:
-                Toast.makeText(this, "Go to edti profile", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.page_change_password:
-                Toast.makeText(this, "Go to change password", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.page_logout:
-                showSignOutDialog();
-                break;
+        Fragment fragmentSelected = null;
+
+        if (id == R.id.page_home) {
+            //todo: intent to home crash app for reason cannot remove all fragment
+            drawer.openDrawer(GravityCompat.START);
+            getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentById(R.id.content_home)).commit();
+            Toast.makeText(this, "Go to home", Toast.LENGTH_SHORT).show();
+        } else {
+            switch (id){
+                case R.id.page_category:
+                    fragmentSelected = new CategoryFragment();
+                    txtNameToolbar.setText("Category Management");
+                    Toast.makeText(this, "Go to category", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.page_piority:
+                    fragmentSelected = new PiorityFragment();
+                    txtNameToolbar.setText("Piority Management");
+                    Toast.makeText(this, "Go to piority", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.page_status:
+                    fragmentSelected = new StatusFragment();
+                    txtNameToolbar.setText("Status Management");
+                    Toast.makeText(this, "Go to status", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.page_note:
+                    Toast.makeText(this, "Go to note", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.page_edit_profile:
+                    Toast.makeText(this, "Go to edti profile", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.page_change_password:
+                    Toast.makeText(this, "Go to change password", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.page_logout:
+                    showSignOutDialog();
+                    break;
+            }
+            fragmentManager.beginTransaction().replace(R.id.content_home, fragmentSelected).commit();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

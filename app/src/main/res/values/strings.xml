@@ -33,4 +33,6 @@
     <string name="txt_show_date_category">Date</string>
     <string name="txt_name_piority">Name of piority :</string>
     <string name="txt_show_name_piority">Name of piority</string>
+    <string name="hint_name_new_status">Name of status</string>
+    <string name="txt_name_status">Name of status</string>
 </resources>
