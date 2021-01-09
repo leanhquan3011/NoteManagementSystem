@@ -32,16 +32,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.leanhquan.notemanagementsystem.Common.Common;
-import com.leanhquan.notemanagementsystem.HomeActivity;
-import com.leanhquan.notemanagementsystem.Inteface.ItemClickListener;
 import com.leanhquan.notemanagementsystem.Model.Category;
 import com.leanhquan.notemanagementsystem.R;
 import com.leanhquan.notemanagementsystem.ViewHolder.CategoryViewHolder;
 import com.rengwuxian.materialedittext.MaterialEditText;
-
 import java.util.Date;
-import java.util.Random;
-import java.util.UUID;
+
 
 public class CategoryFragment extends Fragment {
 
@@ -63,8 +59,6 @@ public class CategoryFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        //todo: create Contextmenu -> delete and update / create layout for dialog update and delete category
 
         return inflater.inflate(R.layout.fragment_category, container, false);
     }
@@ -156,31 +150,14 @@ public class CategoryFragment extends Fragment {
                 final String newCategory = edtNameNewCategory.getText().toString().trim();
                 final String currentDateTimeString = java.text.DateFormat.getDateTimeInstance().format(new Date()).trim();
 
-                final int a = new Random().nextInt(15-1)+1;
                 if(!newCategory.isEmpty()){
-                    categories.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if(snapshot.child(newCategory).exists()){
-                                progressDialog.dismiss();
-                                Toast.makeText(getActivity(), "This category have already exits", Toast.LENGTH_SHORT).show();
-                            }else{
-                                createCategory = new Category(newCategory, currentDateTimeString);
-                                categories.child(String.valueOf(a)).setValue(createCategory);
-                                progressDialog.dismiss();
-
-                                Toast.makeText(getActivity(), "Add "+newCategory+" successfuly", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                                optionDialog.dismiss();
-                        }
-                    });
+                    createCategory = new Category(newCategory, currentDateTimeString);
                 } else {
                     progressDialog.dismiss();
                     Toast.makeText(getActivity(), "Please fill full information", Toast.LENGTH_SHORT).show();
                 }
+                categories.push().setValue(createCategory);
+                progressDialog.dismiss();
                 optionDialog.dismiss();
             }
         });
@@ -235,8 +212,6 @@ public class CategoryFragment extends Fragment {
                 progressDialog.show();
 
                 final String newCategoryUpdate = edtNameNewCategory.getText().toString().trim();
-                final String currentDateTimeStringUpdate = java.text.DateFormat.getDateTimeInstance().format(new Date());
-
 
                 if(!newCategoryUpdate.isEmpty()){
                     categories.addValueEventListener(new ValueEventListener() {
