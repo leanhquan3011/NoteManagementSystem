@@ -1,5 +1,7 @@
 package com.leanhquan.notemanagementsystem.Model;
 
+import java.util.Date;
+
 public class Note {
 
     private String  name,
@@ -11,6 +13,8 @@ public class Note {
 
     public Note() {
     }
+
+
 
     public Note(String name, String category, String priority, String status, String plandate, String createddate) {
         this.name = name;

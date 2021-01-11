@@ -28,8 +28,7 @@
 
 
         <LinearLayout
-            android:paddingVertical="10dp"
-            android:layout_marginTop="5dp"
+            android:paddingVertical="5dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -43,7 +42,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"/>
 
-            <com.jaredrummler.materialspinner.MaterialSpinner
+            <Spinner
                 android:layout_weight="6"
                 android:textColor="@color/black"
                 android:textSize="15sp"
@@ -58,7 +57,7 @@
 
 
         <LinearLayout
-            android:paddingVertical="10dp"
+            android:paddingVertical="5dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -72,7 +71,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"/>
 
-            <com.jaredrummler.materialspinner.MaterialSpinner
+            <Spinner
                 android:layout_weight="6"
                 android:textColor="@color/black"
                 android:textSize="15sp"
@@ -86,7 +85,7 @@
 
 
         <LinearLayout
-            android:paddingVertical="10dp"
+            android:paddingVertical="5dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -100,7 +99,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"/>
 
-            <com.jaredrummler.materialspinner.MaterialSpinner
+            <Spinner
                 android:layout_weight="6"
                 android:textColor="@color/black"
                 android:textSize="15sp"
@@ -113,7 +112,6 @@
 
 
         <LinearLayout
-            android:paddingVertical="10dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
