@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         if(user!=null && pwd != null)
         {
             if(!user.isEmpty() && !pwd.isEmpty())
-                login(user,pwd);
+                loginRemember(user,pwd);
         }
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -76,6 +76,38 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void loginRemember(final String user, final String pwd) {
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("Please waiting...");
+        dialog.show();
+
+        userDB.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.child(user).exists()) {
+                    dialog.dismiss();
+                    User userLogin = snapshot.child(user).getValue(User.class);
+
+                    if (userLogin.getPassword().equals(pwd)) {
+                        if (cbRemember.isChecked()) {
+                            Paper.book().write(Common.USER_KEY, edtUsername.getText().toString());
+                            Paper.book().write(Common.PASS_KEY, edtPassword.getText().toString());
+                        }
+                        Intent homeInten = new Intent(MainActivity.this, HomeActivity.class);
+                        Common.currentUser = userLogin;
+                        startActivity(homeInten);
+                        finish();
+                    }
+                }
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void login(final String user, final String pass) {
@@ -117,6 +149,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
 
     private void init() {

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -30,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.jaredrummler.materialspinner.MaterialSpinner;
+import com.leanhquan.notemanagementsystem.Common.Common;
 import com.leanhquan.notemanagementsystem.Model.Category;
 import com.leanhquan.notemanagementsystem.Model.Note;
 import com.leanhquan.notemanagementsystem.Model.Piority;
@@ -51,8 +53,11 @@ public class NoteFragment extends Fragment {
     private MaterialEditText    edtNameNewNote;
     private Spinner             categorySpinner,
                                 pioritySpinner,
-                                statusSpinner;
+                                statusSpinner,
+                                update;
     private Button              btnAdd,
+                                btnok,
+                                btndis,
                                 btnCancel,
                                 btnPlanDate;
     private Note                createNote;
@@ -261,6 +266,7 @@ public class NoteFragment extends Fragment {
 
                 if(!name.isEmpty()){
                     createNote = new Note(name, noteCate, notePiority, noteStatus, formatted, currentDateTimeString);
+                    optionDialog.dismiss();
                 } else {
                     progressDialog.dismiss();
                     Toast.makeText(getActivity(), "Please fill full information", Toast.LENGTH_SHORT).show();
@@ -281,6 +287,83 @@ public class NoteFragment extends Fragment {
         optionDialog.show();
     }
 
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        if (item.getTitle().equals(Common.UPDATE)){
+            showDialogUpdateNote(adapterNoteList.getRef(item.getOrder()).getKey(),adapterNoteList.getItem(item.getOrder()));
+        } else if (item.getTitle().equals(Common.DELETE)) {
+            showDialogDeleteNote(adapterNoteList.getRef(item.getOrder()).getKey());
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    private void showDialogDeleteNote(String key) {
+        reference = database.getReference().child("notes");
+        reference.child(key).removeValue();
+        Toast.makeText(getActivity(), "Item Deleted", Toast.LENGTH_SHORT).show();
+    }
+
+    private void showDialogUpdateNote(final String key, final Note item) {
+        final AlertDialog optionDialog = new AlertDialog.Builder(getActivity()).create();
+        optionDialog.setTitle("edit note");
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        View addNote = inflater.inflate(R.layout.layout_update_process_note,null, false);
+        update = addNote.findViewById(R.id.updateProcess);
+        btnok = addNote.findViewById(R.id.btnOkupdate);
+        btndis = addNote.findViewById(R.id.btncancelUpdat);
+
+        optionDialog.setView(addNote);
+        optionDialog.setIcon(R.drawable.ic_status);
+
+        reference = database.getReference().child("status");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                final List<String> nameStatus = new ArrayList<>();
+                for (DataSnapshot status : snapshot.getChildren()){
+                    String category = status.child("name").getValue(String.class);
+                    nameStatus.add(category);
+                }
+                final ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, nameStatus);
+                dataAdapter.notifyDataSetChanged();
+                update.setAdapter(dataAdapter);
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
 
+        btnok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final ProgressDialog progressDialog = new ProgressDialog(getContext());
+                progressDialog.setMessage("Waiting....");
+                progressDialog.show();
+
+                DatabaseReference referencenotes;
+                referencenotes = database.getReference().child("notes");
+                String noteStatus = String.valueOf(update.getSelectedItem());
+
+
+                    item.setStatus(noteStatus);
+                    referencenotes.child(key).setValue(item);
+                    progressDialog.dismiss();
+                    optionDialog.dismiss();
+
+            }
+        });
+
+        btndis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                optionDialog.dismiss();
+            }
+        });
+
+        optionDialog.show();
+    }
 }

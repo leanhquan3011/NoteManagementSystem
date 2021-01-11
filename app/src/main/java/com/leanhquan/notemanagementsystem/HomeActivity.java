@@ -8,28 +8,40 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.leanhquan.notemanagementsystem.Common.Common;
-import com.leanhquan.notemanagementsystem.Model.Piority;
+import com.leanhquan.notemanagementsystem.Model.ChartValue;
+import com.leanhquan.notemanagementsystem.Model.Note;
+import com.leanhquan.notemanagementsystem.Model.Status;
 import com.leanhquan.notemanagementsystem.UI.CategoryFragment;
+import com.leanhquan.notemanagementsystem.UI.ChangePasswordFragment;
 import com.leanhquan.notemanagementsystem.UI.NoteFragment;
 import com.leanhquan.notemanagementsystem.UI.PiorityFragment;
 import com.leanhquan.notemanagementsystem.UI.StatusFragment;
+
+import java.util.ArrayList;
 
 import io.paperdb.Paper;
 
@@ -39,12 +51,90 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView      navigationView;
     private TextView            txtFullname, txtNameToolbar;
     private Toolbar             toolbar;
+    private PieChart            pieChart;
+    private FirebaseDatabase    database;
+    private DatabaseReference   reference;
+    private       int val = 0;
+
+
+    private ArrayList<PieEntry> works;
+    private  PieDataSet pieDataSet;
+    private ArrayList<ChartValue> chartValues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         init();
+        database = FirebaseDatabase.getInstance();
+
+        pieChart = findViewById(R.id.pieChart);
+        works = new ArrayList<>();
+        chartValues = new ArrayList<>();
+
+        reference = database.getReference("status");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                chartValues.clear();
+                for(DataSnapshot UserSnapshot : snapshot.getChildren())
+                {
+                    Status status= UserSnapshot.getValue(Status.class);
+                    chartValues.add(new ChartValue(status.getName(),0));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        reference = database.getReference("notes");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot UserSnapshot : snapshot.getChildren())
+                {
+                    Note note= UserSnapshot.getValue(Note.class);
+                    for(ChartValue chartStatus : chartValues)
+                    {
+                        if(note.getStatus().equals(chartStatus.getName()))
+                        {
+                            chartStatus.setValue(val++);
+                        }
+                    }
+                }
+                for(ChartValue chartStatus : chartValues)
+                {
+                    if(chartStatus.getValue()!=0)
+                    {
+                        works.add(new PieEntry(chartStatus.getValue(),chartStatus.getName()));
+                    }
+                }
+                pieChart.notifyDataSetChanged();
+                pieChart.invalidate();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        pieDataSet = new PieDataSet(works,"works");
+        pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        pieDataSet.setValueTextSize(15f);
+
+
+        PieData pieData = new PieData(pieDataSet);
+        pieChart.setData(pieData);
+        pieChart.setUsePercentValues(true);
+        pieChart.getDescription().setEnabled(false);
+        pieChart.setCenterText("Schedule");
+        pieChart.animate();
+
+
+
 
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
                 this, drawer,toolbar,
@@ -136,6 +226,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     Toast.makeText(this, "Go to edti profile", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.page_change_password:
+                    fragmentSelected = new ChangePasswordFragment();
+                    txtNameToolbar.setText("Change password");
                     Toast.makeText(this, "Go to change password", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.page_logout:

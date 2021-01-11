@@ -1,5 +1,7 @@
 package com.leanhquan.notemanagementsystem.Model;
 
+import android.widget.EditText;
+
 public class User {
     private String username, password, email;
 
