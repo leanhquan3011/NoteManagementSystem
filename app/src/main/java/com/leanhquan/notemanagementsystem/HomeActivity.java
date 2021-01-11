@@ -39,6 +39,7 @@ import com.leanhquan.notemanagementsystem.UI.CategoryFragment;
 import com.leanhquan.notemanagementsystem.UI.ChangePasswordFragment;
 import com.leanhquan.notemanagementsystem.UI.NoteFragment;
 import com.leanhquan.notemanagementsystem.UI.PiorityFragment;
+import com.leanhquan.notemanagementsystem.UI.ProfileFragment;
 import com.leanhquan.notemanagementsystem.UI.StatusFragment;
 
 import java.util.ArrayList;
@@ -223,6 +224,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     Toast.makeText(this, "Go to note", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.page_edit_profile:
+                    fragmentSelected = new ProfileFragment();
+                    txtNameToolbar.setText("Profile");
                     Toast.makeText(this, "Go to edti profile", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.page_change_password:

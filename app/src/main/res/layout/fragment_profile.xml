@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UI.ProfileFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/txtEmailRegister"
+            android:text="@string/txtEmail"
+            android:textColor="#232222"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_above="@+id/edtEmailProfile"
+            android:layout_marginStart="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/edtEmailProfile"
+            android:layout_marginHorizontal="18dp"
+            android:layout_marginTop="3dp"
+            android:hint="@string/hintEdtEmail"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:maxLength="30"
+            android:textSize="16sp"
+            android:layout_marginBottom="15dp"
+            android:layout_above="@id/txtUsernameProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="" />
+
+        <TextView
+            android:id="@+id/txtUsernameProfile"
+            android:text="@string/txtUsernameLogin"
+            android:textColor="#232222"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_above="@+id/edtUsernameProfile"
+            android:layout_marginStart="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/edtUsernameProfile"
+            android:layout_marginHorizontal="18dp"
+            android:layout_marginTop="3dp"
+            android:hint="@string/hintEdtusername"
+            android:inputType="textCapCharacters"
+            android:maxLines="1"
+            android:maxLength="30"
+            android:textSize="16sp"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="" />
+
+
+
+        <Button
+            android:id="@+id/btnProfile"
+            android:text="Change"
+            android:textColor="#FFF"
+            android:layout_marginHorizontal="25dp"
+            android:layout_below="@+id/edtUsernameProfile"
+            android:layout_marginTop="70dp"
+            android:background="@drawable/bg_button_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+</FrameLayout>
