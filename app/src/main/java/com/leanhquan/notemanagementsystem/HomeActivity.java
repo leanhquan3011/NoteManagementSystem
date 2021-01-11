@@ -27,6 +27,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.leanhquan.notemanagementsystem.Common.Common;
 import com.leanhquan.notemanagementsystem.Model.Piority;
 import com.leanhquan.notemanagementsystem.UI.CategoryFragment;
+import com.leanhquan.notemanagementsystem.UI.NoteFragment;
 import com.leanhquan.notemanagementsystem.UI.PiorityFragment;
 import com.leanhquan.notemanagementsystem.UI.StatusFragment;
 
@@ -38,15 +39,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView      navigationView;
     private TextView            txtFullname, txtNameToolbar;
     private Toolbar             toolbar;
-    private FragmentManager     fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         init();
-
-        fragmentManager = getSupportFragmentManager();
 
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
                 this, drawer,toolbar,
@@ -110,13 +108,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         Fragment fragmentSelected = null;
 
-        if (id == R.id.page_home) {
-            //todo: intent to home crash app for reason cannot remove all fragment
-            drawer.openDrawer(GravityCompat.START);
-            getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentById(R.id.content_home)).commit();
-            Toast.makeText(this, "Go to home", Toast.LENGTH_SHORT).show();
-        } else {
             switch (id){
+                case R.id.page_home:
+                    Intent intentHome = new Intent(this, HomeActivity.class);
+                    startActivity(intentHome);
                 case R.id.page_category:
                     fragmentSelected = new CategoryFragment();
                     txtNameToolbar.setText("Category Management");
@@ -133,6 +128,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     Toast.makeText(this, "Go to status", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.page_note:
+                    fragmentSelected = new NoteFragment();
+                    txtNameToolbar.setText("Notes Management");
                     Toast.makeText(this, "Go to note", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.page_edit_profile:
@@ -145,7 +142,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     showSignOutDialog();
                     break;
             }
-            fragmentManager.beginTransaction().replace(R.id.content_home, fragmentSelected).commit();
+
+        if (fragmentSelected != null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_home, fragmentSelected);
+            ft.commit();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

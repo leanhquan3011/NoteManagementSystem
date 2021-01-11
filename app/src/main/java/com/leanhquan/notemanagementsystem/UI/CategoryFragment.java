@@ -118,12 +118,13 @@ public class CategoryFragment extends Fragment {
 
             @Override
             protected void onBindViewHolder(@NonNull CategoryViewHolder holder, int position, @NonNull Category model) {
-                holder.txtNameCategory.setText(model.getName());
+                holder.txtNameCategory.setText((CharSequence) model.getName());
                 holder.txtDateCreateCategory.setText(model.getDate());
             }
 
         };
         recycleCategory.setAdapter(adapterCategorylist);
+        adapterCategorylist.notifyDataSetChanged();
     }
 
     private void showDialogAddnewCategory() {
@@ -200,7 +201,7 @@ public class CategoryFragment extends Fragment {
         optionDialog.setView(addMenuLayout);
         optionDialog.setIcon(R.drawable.ic_note);
 
-        edtNameNewCategory.setText(item.getName());
+        edtNameNewCategory.setText((CharSequence) item.getName());
 
 
         btnAdd.setOnClickListener(new View.OnClickListener() {

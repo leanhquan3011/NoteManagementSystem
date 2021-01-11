@@ -1,5 +1,7 @@
 package com.leanhquan.notemanagementsystem.Model;
 
+import androidx.annotation.NonNull;
+
 public class Category {
     private String name, date;
 
@@ -10,6 +12,12 @@ public class Category {
         this.name = name;
         this.date = date;
     }
+    @NonNull
+    @Override
+    public String toString() {
+        return name;
+    }
+
 
     public String getName() {
         return name;

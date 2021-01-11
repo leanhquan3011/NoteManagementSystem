@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../NoteManagementSystem.iml" filepath="$PROJECT_DIR$/../NoteManagementSystem.iml" group="NoteManagementSystem" />
+      <module fileurl="file://$PROJECT_DIR$/app.iml" filepath="$PROJECT_DIR$/app.iml" group="NoteManagementSystem/app" />
+    </modules>
+  </component>
+</project>
