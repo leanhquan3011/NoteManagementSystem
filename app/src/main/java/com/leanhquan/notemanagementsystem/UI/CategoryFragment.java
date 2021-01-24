@@ -148,18 +148,18 @@ public class CategoryFragment extends Fragment {
                 progressDialog.setMessage("Waiting....");
                 progressDialog.show();
 
-                final String newCategory = edtNameNewCategory.getText().toString().trim();
+                final String newCategory = edtNameNewCategory.getText().toString();
                 final String currentDateTimeString = java.text.DateFormat.getDateTimeInstance().format(new Date()).trim();
 
                 if(!newCategory.isEmpty()){
                     createCategory = new Category(newCategory, currentDateTimeString);
+                    categories.push().setValue(createCategory);
+                    progressDialog.dismiss();
+                    optionDialog.dismiss();
                 } else {
                     progressDialog.dismiss();
                     Toast.makeText(getActivity(), "Please fill full information", Toast.LENGTH_SHORT).show();
                 }
-                categories.push().setValue(createCategory);
-                progressDialog.dismiss();
-                optionDialog.dismiss();
             }
         });
 

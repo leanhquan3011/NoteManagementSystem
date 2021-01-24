@@ -55,7 +55,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private PieChart            pieChart;
     private FirebaseDatabase    database;
     private DatabaseReference   reference;
-    private       int val = 0;
 
 
     private ArrayList<PieEntry> works;
@@ -77,7 +76,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                chartValues.clear();
                 for(DataSnapshot UserSnapshot : snapshot.getChildren())
                 {
                     Status status= UserSnapshot.getValue(Status.class);
@@ -97,19 +95,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 for(DataSnapshot UserSnapshot : snapshot.getChildren())
                 {
                     Note note= UserSnapshot.getValue(Note.class);
+
                     for(ChartValue chartStatus : chartValues)
                     {
-                        if(note.getStatus().equals(chartStatus.getName()))
+                        if(note.getStatus().equals(chartStatus.name))
                         {
-                            chartStatus.setValue(val++);
+                            chartStatus.value += 1;
                         }
                     }
                 }
                 for(ChartValue chartStatus : chartValues)
                 {
-                    if(chartStatus.getValue()!=0)
+                    if(chartStatus.value>0)
                     {
-                        works.add(new PieEntry(chartStatus.getValue(),chartStatus.getName()));
+                        works.add(new PieEntry(chartStatus.value,chartStatus.name));
                     }
                 }
                 pieChart.notifyDataSetChanged();
@@ -125,14 +124,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         pieDataSet = new PieDataSet(works,"works");
         pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
         pieDataSet.setValueTextSize(15f);
-
-
         PieData pieData = new PieData(pieDataSet);
         pieChart.setData(pieData);
         pieChart.setUsePercentValues(true);
         pieChart.getDescription().setEnabled(false);
         pieChart.setCenterText("Schedule");
         pieChart.animate();
+
 
 
 

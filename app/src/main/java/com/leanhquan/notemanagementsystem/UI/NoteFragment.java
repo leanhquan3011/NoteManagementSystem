@@ -66,6 +66,8 @@ public class NoteFragment extends Fragment {
 
     private FirebaseDatabase    database;
     private DatabaseReference   reference;
+    private List<String> nameStatus;
+    private  ArrayAdapter<String> dataAdapter;
 
     private FirebaseRecyclerAdapter<Note, NoteViewHolder>  adapterNoteList;
 
@@ -98,6 +100,9 @@ public class NoteFragment extends Fragment {
                 showDialogAddnewNote();
             }
         });
+        nameStatus = new ArrayList<>();
+        dataAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, nameStatus);
+
 
         showListNote();
     }
@@ -263,17 +268,15 @@ public class NoteFragment extends Fragment {
                 System.out.println();
 
 
-
                 if(!name.isEmpty()){
                     createNote = new Note(name, noteCate, notePiority, noteStatus, formatted, currentDateTimeString);
+                    reference.push().setValue(createNote);
+                    progressDialog.dismiss();
                     optionDialog.dismiss();
                 } else {
                     progressDialog.dismiss();
                     Toast.makeText(getActivity(), "Please fill full information", Toast.LENGTH_SHORT).show();
                 }
-                reference.push().setValue(createNote);
-                progressDialog.dismiss();
-                optionDialog.dismiss();
             }
         });
 
@@ -319,12 +322,10 @@ public class NoteFragment extends Fragment {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                final List<String> nameStatus = new ArrayList<>();
                 for (DataSnapshot status : snapshot.getChildren()){
                     String category = status.child("name").getValue(String.class);
                     nameStatus.add(category);
                 }
-                final ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, nameStatus);
                 dataAdapter.notifyDataSetChanged();
                 update.setAdapter(dataAdapter);
 

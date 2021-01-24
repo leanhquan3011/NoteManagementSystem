@@ -127,13 +127,13 @@ public class PiorityFragment extends Fragment {
 
                 if(!newName.isEmpty()){
                     newPiority = new Piority(newName, currentDateTimeString);
+                    piorities.push().setValue(newPiority);
+                    progressDialog.dismiss();
+                    optionDialog.dismiss();
                 } else {
                     progressDialog.dismiss();
                     Toast.makeText(getActivity(), "Please fill full information", Toast.LENGTH_SHORT).show();
                 }
-                piorities.push().setValue(newPiority);
-                progressDialog.dismiss();
-                optionDialog.dismiss();
             }
         });
 

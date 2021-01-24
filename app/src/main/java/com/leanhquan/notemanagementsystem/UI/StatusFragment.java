@@ -210,13 +210,13 @@ public class StatusFragment extends Fragment {
 
                 if(!newName.isEmpty()){
                     newStatus = new Status(newName, currentDateTimeString);
+                    status.push().setValue(newStatus);
+                    progressDialog.dismiss();
+                    optionDialog.dismiss();
                 } else {
                     progressDialog.dismiss();
                     Toast.makeText(getActivity(), "Please fill full information", Toast.LENGTH_SHORT).show();
                 }
-                status.push().setValue(newStatus);
-                progressDialog.dismiss();
-                optionDialog.dismiss();
             }
         });
 
